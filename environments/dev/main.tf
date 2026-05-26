@@ -11,3 +11,21 @@ module "resource_group" {
     managed_by  = "terraform"
   }
 }
+
+module "storage_account" {
+  source   = "../../modules/storage-account"
+
+  storage_account_name = "stterraformlearningdev"
+  resource_group_name  = module.resource_group.name
+  location             = module.resource_group.location
+  account_tier         = "Standard"
+  account_replication_type = "LRS"
+
+  container_name       = "tfstate"
+
+  tags = {
+    environment = "dev"
+    project     = "terraform-learning"
+    managed_by  = "terraform"
+  }
+}

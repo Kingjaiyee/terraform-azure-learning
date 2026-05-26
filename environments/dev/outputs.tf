@@ -12,3 +12,19 @@ output "resource_group_id" {
   description = "ID of the resource group"
   value       = module.resource_group.id
 }
+
+output "storage_account_name" {
+  description = "name of the storage account"
+  value       = module.storage_account.storage_account_name
+}
+
+
+output "storage_account_id" {
+  description = "ID of the storage account"
+  value       = module.storage_account.storage_account_id
+}
+
+output "storage_container_name" {
+  description = "name of the storage container"
+  value       = module.storage_account.storage_container_name
+}
