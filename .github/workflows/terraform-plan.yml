@@ -1,0 +1,41 @@
+# This workflow runs terraform plan on every pull request
+# so you can review infrastructure changes before merging
+
+name: Terraform Plan
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Pull down your repo code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Terraform on the runner
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.4
+
+      # Step 3: Initialize Terraform (downloads providers, connects to backend)
+      - name: Terraform Init
+        working-directory: environments/dev
+        run: terraform init
+
+      # Step 4: Run the plan and show what would change
+      - name: Terraform Plan
+        working-directory: environments/dev
+        run: terraform plan -no-color
