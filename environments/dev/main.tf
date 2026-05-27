@@ -27,5 +27,6 @@ module "storage_account" {
     environment = "dev"
     project     = "terraform-learning"
     managed_by  = "terraform"
+    day         = "3"
   }
 }
