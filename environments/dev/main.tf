@@ -30,3 +30,24 @@ module "storage_account" {
     day         = "3"
   }
 }
+
+module "vnet" {
+  source   = "../../modules/vnet"
+
+  vnet_name           = "vnet-dev-terraform-learning"
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
+  address_space       = "10.0.0.0/16"
+
+  subnets = {
+    "aks-subnet" = {
+      address_prefix = "10.0.1.0/24"
+    }
+    "appgw-subnet" = {
+      address_prefix = "10.0.2.0/24"
+    }
+    "default" = {
+      address_prefix = "10.0.3.0/24"
+    }
+  }
+}
