@@ -71,3 +71,8 @@ variable   "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable   "log_analytics_workspace_id" {
+  description = "The ID of the Log Analytics workspace for Azure Monitor integration."
+  type        = string
+}

@@ -58,6 +58,7 @@ module "aks" {
   cluster_name        = "aks-dev-terraform-learning"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
+  log_analytics_workspace_id = module.log_analytics.id
   dns_prefix          = "aksdevterraformlearning"
   node_count          = 2
   vm_size             = "Standard_B2s"
@@ -66,6 +67,22 @@ module "aks" {
   max_count           = 3
   subnet_id           = module.vnet.subnet_ids["aks-subnet"]
   service_cidr        = "10.1.0.0/16"
+
+  tags = {
+    environment = "dev"
+    project     = "terraform-learning"
+    managed_by  = "terraform"
+  }
+}
+
+module "log_analytics" {
+  source   = "../../modules/log-analytics"
+
+  name                = "law-dev-terraform-learning"
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
 
   tags = {
     environment = "dev"
