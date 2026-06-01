@@ -1,0 +1,46 @@
+# This workflow runs terraform apply when code is merged to main
+# It only runs after a PR is merged, not on direct pushes
+
+name: Terraform Apply
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+jobs:
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Pull down the latest code from main
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install the same Terraform version as local
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.4
+
+      # Step 3: Initialize Terraform
+      - name: Terraform Init
+        working-directory: environments/dev
+        run: terraform init
+
+      # Step 4: Run plan first for the logs (audit trail)
+      - name: Terraform Plan
+        working-directory: environments/dev
+        run: terraform plan -no-color
+
+      # Step 5: Apply the changes automatically
+      - name: Terraform Apply
+        working-directory: environments/dev
+        run: terraform apply -auto-approve -no-color

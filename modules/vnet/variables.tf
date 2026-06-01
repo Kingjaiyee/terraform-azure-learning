@@ -22,9 +22,20 @@ variable "address_space" {
 }
 
 variable "subnets" {
-  description = "A map of subnet names to their address prefixes."
-  type        = map(object({
+  description = "A map of subnet names to their configuration including address prefix and security rules."
+  type = map(object({
     address_prefix = string
+    security_rules = optional(list(object({
+      name                       = string
+      priority                   = number
+      direction                  = string
+      access                     = string
+      protocol                   = string
+      source_port_range          = string
+      destination_port_range     = string
+      source_address_prefix      = string
+      destination_address_prefix = string
+    })), [])
   }))
 }
 
