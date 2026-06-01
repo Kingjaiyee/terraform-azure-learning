@@ -16,6 +16,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     auto_scaling_enabled = var.auto_scaling_enabled
     min_count           = var.auto_scaling_enabled ? var.min_count : null
     max_count           = var.auto_scaling_enabled ? var.max_count : null
+
+    upgrade_settings {
+      max_surge = "10%"
+    }
   }
 
   # Managed identity - Azure handles credentials automatically
