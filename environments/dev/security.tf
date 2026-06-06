@@ -27,3 +27,10 @@ resource "azurerm_role_assignment" "aks_keyvault_secrets_user" {
   role_definition_name = "Key Vault Secrets User"
   principal_id         = module.aks.principal_id
 }
+
+# Role assignment: AKS managed identity can pull images from ACR
+resource "azurerm_role_assignment" "aks_acr_pull" {
+  scope                = module.container_registry.id
+  role_definition_name = "AcrPull"
+  principal_id         = module.aks.principal_id
+}
