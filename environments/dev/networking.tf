@@ -33,6 +33,28 @@ module "vnet" {
           destination_address_prefix = "*"
         },
         {
+          name                       = "allow-http-inbound"
+          priority                   = 120
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "80"
+          source_address_prefix      = "*"
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "allow-nodeport-range"
+          priority                   = 130
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "30000-32767"
+          source_address_prefix      = "*"
+          destination_address_prefix = "*"
+        },
+        {
           name                       = "deny-all-inbound-internet"
           priority                   = 4000
           direction                  = "Inbound"
@@ -59,3 +81,4 @@ module "vnet" {
     managed_by  = "terraform"
   }
 }
+
